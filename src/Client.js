@@ -5,6 +5,7 @@ module.exports = class Client extends Discord.Client{
    constructor(options={},clientOptions={}){
       super(clientOptions);
       this.optins = options;
+      this.logErrors = options.logErrors || true;
       this.clientOptions = clientOptions;
       this.token = options.token || clientOptions.token;
       this.color = options.color || "65535";
@@ -17,7 +18,8 @@ module.exports = class Client extends Discord.Client{
       this.prefix = Array.isArray(options.prefix) ? options.prefix : [options.prefix || "!"];
       this.prefixConfig = {
           useUsername: options.prefixConfig ? options.prefixConfig.useUsername : true,
-          useMention: options.prefixConfig ? options.prefixConfig.useMention : true
+          useMention: options.prefixConfig ? options.prefixConfig.useMention : true,
+          editMessage: options.prefixConfig ? options.prefixConfig.editMessage : true
       }
       this.op = clientOptions
       this.external = {}

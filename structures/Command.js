@@ -1,3 +1,4 @@
+const buildMessage = require("./createMessage.js")
 module.exports = class Command{
    constructor(options){
        this.name = options.aliases ? options.aliases.concat(options.name).map(a => a.toLowerCase()) : [options.name.toLowerCase()]
@@ -24,19 +25,24 @@ module.exports = class Command{
            args:args.map(a=> isNaN(a) ? a : parseInt(a)),
            client:message.client,
            prefix:prefix,
-		   buildMessage:function(params={}){
-			   params.title  = params.title ? params.title : _this.name.pop(),
-               params.color = params.color || message.client.color
-               params = {embed:params}
-			    return {
-					send(id){
-						if (!id)message.channel.send(params)
-						else message.client.channels.get(id.toString()).send(params)
-					}
-				}}
+		   buildMessage(params={}){
+            params.title  = params.title ? params.title : _this.name.pop();
+            params.color = params.color || message.client.color;
+            params.footer = params.footer ||  {
+              icon_url:message.author.displayAvatarURL,
+              text:message.author.username
+            }
+            params = {embed:params};
+             return {
+                 send(id){
+                     if (!id) message.channel.send(params)
+                     else message.client.channels.get(id.toString()).send(params)
+                 }
+             }}
        })}
        catch(err){
-           console.error(`${err.toString()} in command: ${this.name.pop()}`)
+         if (message.client.logErrors)  console.error(`${err.toString()} in command: ${this.name.pop()}`);
+         message.client.emit("commandError",_this,err);
        }
        this.ob.push(message.author.id)
        setTimeout(() => this.ob.splice(this.ob.indexOf(message.authorid),1),1000*this.cd)

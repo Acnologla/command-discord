@@ -16,4 +16,5 @@ module.exports = function (client) {
            command.runCommand(message,prefix,args)
        }
     })
+    if (client.prefixConfig.editMessage) client.on("messageUpdate",(_,newmsg) => client.emit("message",newmsg));
 }

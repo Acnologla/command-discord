@@ -9,11 +9,16 @@ const client = command.Client({
     token:"your bot token",
     color:"65535", //optional color for  embeds in decimal (65535 default)
     path:"./commands", // path for commands folder, (./commands default)
-    prefix:"h!", // prefix can be an array if you need multiple prefix, (! default)
+    prefix:"h!",
+    logErrors:true, // true default, if you dont want to console log errors in command false
+    // you can get errors using the commandError event
+     // prefix can be an array if you need multiple prefix, (! default)
     prefixConfig:{
          useUsername: true,
-          useMention: true
-    }, // if you dont want to use username or mention as an prefix put these false (default is true)
+          useMention: true,
+          // if you dont want to use username or mention as an prefix put these false (default is true)
+          editMessage:true // if editing a message can run a command default is true
+    }, 
     external:[{
         key:"database",
         value:require("mongoose")
@@ -22,6 +27,11 @@ const client = command.Client({
 },{
     //client options for discordjs (https://discord.js.org/#/docs/main/stable/typedef/ClientOptions)
 });
+
+client.on("commandError",function(command,error){
+    console.error(`Error ${error.toString()} in command ${command.name}`) 
+    //this log is automatic if you dont disable the logErrors option
+})
 
 client.start("token"); // you can pass token here, if you dont want to pass options
 // you can restart the bot using client.restart()
@@ -66,6 +76,7 @@ module.exports.run = function(params){
       this.aliases = ["profilepic","picture"] 
   }
   run({message,buildMessage,args}){
+      // buildMessage is used for embeds
    buildMessage({
       image:{
           url:message.mentions.users.first() ? message.mentions.users.first().displayAvatarURL : message.author.displayAvatarURL
@@ -87,12 +98,12 @@ module.exports = new (class cmd{
   }
   run({message,buildMessage,client,args}){
    buildMessage({
-        description:client.commands.map(a => "`"+a.name.pop()+"("+a.help+")`").join(", ")
+        description:client.commands.map(a => "`"+a.name[a.name.length-1]+"("+a.help+")`").join(", ")
     }).send()
     // or we can just send a category commands
     buildMessage({
         title:"Util commands",
-        description:client.commands.filter(a=>a.category == "util").map(a => "`"+a.name.pop()+"("+a.help+")`").join(", ")
+        description:client.commands.filter(a=>a.category == "util").map(a => "`"+a.name[a.name.length-1]+"("+a.help+")`").join(", ")
     }).send()
 }
 })
