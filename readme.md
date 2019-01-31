@@ -72,11 +72,10 @@ client.on("commandError", function (command, error) {
 ### Bot Playing
 ```js
 client.on("ready", async () => {
-    console.log('on')
+    console.log(`Logged as ${client.user.username} with ${client.users.size} users and ${client.guilds.size} guilds`)
     const phrases = [`Use ${client.prefix[0]}help`, `Use ${client.prefix[0]}help to view my Commands`]
     setInterval(() => {
-        var selected = phrases[Math.floor(Math.random() * phrases.length)]
-        if (selected == null) selected = phrases[Math.floor(Math.random() * phrases.length)]
+        let selected = phrases[Math.floor(Math.random() * phrases.length)]
         client.user.setPresence({ game: { name: `${selected}` } })
     }, 5 * 60 * 1000)
     client.user.setPresence({ game: { name: phrases[0] } })
