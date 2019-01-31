@@ -145,10 +145,11 @@ module.exports = new (class cmd {
         this.aliases = ["pong"]
     }
     run({ message, buildMessage, client, args}){
-        message.reply(`:ping_pong:Pong ${Math.floor(message.client.ping)}`)
+        message.reply(`:ping_pong:Pong ${Math.floor(client.ping)}`)
     }
 })
 ```
 
-Example of bot using this framework [Here](https://github.com/darkwolfinho/SimpleBot)
 You can find the documentation of discord.js [Here](https://discord.js.org/#/docs/main/stable/general/welcome)
+<br><br>
+Example of bot using this framework [Here](https://github.com/darkwolfinho/SimpleBot)
