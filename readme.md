@@ -73,7 +73,7 @@ client.on("commandError", function (command, error) {
 ```js
 client.on("ready", async () => {
     console.log('on')
-    const phrases = [`Use ${client.prefix}help`, `Use ${client.prefix}help to view my Commands`]
+    const phrases = [`Use ${client.prefix[0]}help`, `Use ${client.prefix[0]}help to view my Commands`]
     setInterval(() => {
         var selected = phrases[Math.floor(Math.random() * phrases.length)]
         if (selected == null) selected = phrases[Math.floor(Math.random() * phrases.length)]
@@ -86,12 +86,36 @@ client.on("ready", async () => {
 # Commands Examples
 - Let's do a simple avatar command
 ```js
-// commands/avatar.js
 // commands/others/avatar.js
+// we can do this command in this way
+
+exports.name = "avatar"
+exports.help = "See someone avatar"
+exports.cooldown = 2 // cooldown in seconds
+exports.cdMessage = "Wait 2 seconds to use this again" // message if someone try to use command in cooldown
+exports.aliases = ["profilepic","picture"] 
+exports.category = "others" // optional better for filters
+// all params are opcional
+exports.run = function(params){
+     // params.message is the message for the command you can use params.message.client for the client
+     //param.prefix for the prefix  and param.args for command argumentes
+     const {message,args} = params;
+     message.channel.send({
+         embed:{
+             title:"avatar",
+             color:message.client.color,
+             image:{
+                 url:message.mentions.users.first() ? message.mentions.users.first().displayAvatarURL : message.author.displayAvatarURL
+             }
+         }
+     })
+}
+
+// or we can use this way
 module.exports = new (class cmd{
   constructor(){
       this.name = "avatar";
-      this.category = "util"
+      this.category = "others"
       this.help = "See someone avatar";
       this.cooldown = 2;
       this.cdMessage = "Wait 2 seconds to use this again";
@@ -127,7 +151,7 @@ module.exports = new (class cmd{
     // or we can just send a category commands
     buildMessage({
         title:"Util commands",
-        description:client.commands.filter(a=>a.category == "util").map(a => "`"+a.name[a.name.length-1]+"("+a.help+")`").join(", ")
+        description:client.commands.filter(a=>a.category == "others").map(a => "`"+a.name[a.name.length-1]+"("+a.help+")`").join(", ")
     }).send()
 }
 })
