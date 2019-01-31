@@ -52,7 +52,7 @@ const client = command.Client({
     // client options for discordjs (https://discord.js.org/#/docs/main/stable/typedef/ClientOptions)
 });
 
-client.start(); // to start the bot
+client.start(); // to start the bot you can pass token here, if you dont pass options
 ```
 - All parameters (client options) can be used in external codes
 -- Example: client.prefix, client.color, client.external.Discord
