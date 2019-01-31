@@ -110,7 +110,7 @@ exports.run = function(params){
      })
 }
 
-// or we can use this way
+// or we can do this more "beutifull"
 module.exports = new (class cmd{
   constructor(){
       this.name = "avatar";
